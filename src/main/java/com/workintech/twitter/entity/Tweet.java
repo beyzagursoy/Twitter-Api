@@ -23,7 +23,7 @@ public class Tweet {
     private Long id;
 
     @NotBlank(message = "Tweet içeriği boş olamaz.")
-    @Size(max = 280, message = "Tweet en fazla 280 karakter olabilir")
+    @Size(max = 280, message = "Tweet en fazla 280 karakter olabilir.")
     @Column(name = "content")
     private String content;
 

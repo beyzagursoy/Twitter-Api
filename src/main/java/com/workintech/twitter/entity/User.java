@@ -27,12 +27,12 @@ public class User {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @NotBlank(message = "E-posta boş olamaz")
-    @Email(message = "Geçerli bir e-posta adresi giriniz")
+    @NotBlank(message = "E-posta boş olamaz.")
+    @Email(message = "Geçerli bir e-posta adresi giriniz.")
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @NotBlank(message = "Şifre boş olamaz")
+    @NotBlank(message = "Şifre boş olamaz.")
     @Column(name = "password", nullable = false)
     private String password;
 
