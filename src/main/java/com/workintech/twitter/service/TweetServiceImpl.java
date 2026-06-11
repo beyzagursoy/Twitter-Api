@@ -2,8 +2,10 @@ package com.workintech.twitter.service;
 
 import com.workintech.twitter.entity.Tweet;
 import com.workintech.twitter.entity.User;
+import com.workintech.twitter.exception.TwitterException;
 import com.workintech.twitter.repository.TweetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public class TweetServiceImpl implements TweetService{
     @Override
     public Tweet findById(Long id){
         return tweetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tweet bulunamadı! ID: " + id));
+                .orElseThrow(() -> new TwitterException("Tweet bulunamadı! ID: " + id, HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -45,7 +47,7 @@ public class TweetServiceImpl implements TweetService{
         Tweet tweet = findById(id);
 
         if(!tweet.getUser().getId().equals(userId)){
-            throw new RuntimeException("Bu tweeti silmeye yetkiniz yok! Sadece tweet sahibi silebilir.");
+            throw new TwitterException("Bu tweeti silmeye yetkiniz yok! Sadece tweet sahibi silebilir.", HttpStatus.BAD_REQUEST);
         }
 
         tweetRepository.delete(tweet);
@@ -71,11 +73,11 @@ public class TweetServiceImpl implements TweetService{
         Tweet retweet = findById(retweetId);
 
         if(retweet.getOriginalTweet() == null){
-            throw new RuntimeException("Bu normal bir tweet, retweet silme endpoint'inden silinemez!");
+            throw new TwitterException("Bu normal bir tweet, retweet silme endpoint'inden silinemez!", HttpStatus.BAD_REQUEST);
         }
 
         if(!retweet.getUser().getId().equals(userId)){
-            throw new RuntimeException("Bu retweet'i silmeye yetkiniz yok! Sadece retweet sahibi silebilir.");
+            throw new TwitterException("Bu retweet'i silmeye yetkiniz yok! Sadece retweet sahibi silebilir.", HttpStatus.BAD_REQUEST);
         }
 
         tweetRepository.delete(retweet);

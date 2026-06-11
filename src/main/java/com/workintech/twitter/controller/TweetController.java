@@ -1,9 +1,11 @@
 package com.workintech.twitter.controller;
 
 import com.workintech.twitter.entity.Tweet;
+import com.workintech.twitter.exception.TwitterException;
 import com.workintech.twitter.service.TweetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +20,7 @@ public class TweetController {
     @PostMapping()
     public ResponseEntity<Tweet> createTweet(@RequestBody Tweet tweet, @RequestParam Long userId) {
         if (tweet.getContent() == null || tweet.getContent().trim().isEmpty()) {
-            throw new RuntimeException("Tweet içeriği boş olamaz!");
+            throw new TwitterException("Tweet içeriği boş olamaz!", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(tweetService.save(userId, tweet));
     }
