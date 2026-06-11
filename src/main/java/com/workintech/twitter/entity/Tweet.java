@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -41,4 +42,12 @@ public class Tweet {
     protected void onCreate(){
         this.createdAt = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("tweet")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("tweet")
+    private List<Like> likes = new ArrayList<>();
 }
