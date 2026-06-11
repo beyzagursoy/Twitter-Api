@@ -51,4 +51,33 @@ public class TweetServiceImpl implements TweetService{
         tweetRepository.delete(tweet);
         return tweet;
     }
+
+    //retweet
+    @Override
+    public Tweet retweet(Long tweetId, Long userId) {
+        Tweet originalTweet = findById(tweetId);
+        User user = userService.findById(userId);
+
+        Tweet retweet = new Tweet();
+        retweet.setUser(user);
+        retweet.setOriginalTweet(originalTweet);
+        retweet.setContent(null);
+
+        return tweetRepository.save(retweet);
+    }
+
+    @Override
+    public void deleteRetweet(Long retweetId, Long userId) {
+        Tweet retweet = findById(retweetId);
+
+        if(retweet.getOriginalTweet() == null){
+            throw new RuntimeException("Bu normal bir tweet, retweet silme endpoint'inden silinemez!");
+        }
+
+        if(!retweet.getUser().getId().equals(userId)){
+            throw new RuntimeException("Bu retweet'i silmeye yetkiniz yok! Sadece retweet sahibi silebilir.");
+        }
+
+        tweetRepository.delete(retweet);
+    }
 }

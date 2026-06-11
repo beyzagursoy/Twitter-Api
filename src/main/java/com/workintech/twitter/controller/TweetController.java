@@ -4,6 +4,7 @@ import com.workintech.twitter.entity.Tweet;
 import com.workintech.twitter.service.TweetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +15,12 @@ import java.util.List;
 public class TweetController {
     private final TweetService tweetService;
 
-    @PostMapping
-    public Tweet createTweet(@RequestParam Long userId, @Valid @RequestBody Tweet tweet){
-        return tweetService.save(userId, tweet);
+    @PostMapping()
+    public ResponseEntity<Tweet> createTweet(@RequestBody Tweet tweet, @RequestParam Long userId) {
+        if (tweet.getContent() == null || tweet.getContent().trim().isEmpty()) {
+            throw new RuntimeException("Tweet içeriği boş olamaz!");
+        }
+        return ResponseEntity.ok(tweetService.save(userId, tweet));
     }
 
     @GetMapping("/findByUserId")

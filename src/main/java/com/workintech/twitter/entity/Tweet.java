@@ -25,7 +25,6 @@ public class Tweet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Tweet içeriği boş olamaz.")
     @Size(max = 280, message = "Tweet en fazla 280 karakter olabilir.")
     @Column(name = "content")
     private String content;
@@ -50,4 +49,10 @@ public class Tweet {
     @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("tweet")
     private List<Like> likes = new ArrayList<>();
+
+    //Retweet
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "original_tweet_id")
+    @JsonIgnoreProperties({"comments", "likes", "retweets"})
+    private Tweet originalTweet;
 }

@@ -10,4 +10,8 @@ public interface TweetService {
     Tweet findById(Long id);
     Tweet update(Long id, Tweet updatedTweet);
     Tweet delete(Long id, Long userId);
+
+    //retweet
+    Tweet retweet(Long tweetId, Long userId);
+    void deleteRetweet(Long retweetId, Long userId);
 }
